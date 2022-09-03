@@ -5,8 +5,8 @@ init {
 }
 
 startup {
-    // The Categories for this game are based around 100k or 1m, so make a setting to twitch between
-    settings.Add("100k", true, "100k = on, 1m = off");
+	// The Categories for this game are based around 100k or 1m, so make a setting to twitch between
+	settings.Add("100k", true, "100k = on, 1m = off");
 }
 
 update {
@@ -14,7 +14,7 @@ update {
 }
 
 split {
-    int target = settings["100k"] ? 100000 : 1000000;
+	int target = settings["100k"] ? 100000 : 1000000;
 	return vars.watcher.Current >= target;
 }
 
