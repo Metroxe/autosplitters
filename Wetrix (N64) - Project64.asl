@@ -6,15 +6,22 @@ init {
 
 startup {
 	// The Categories for this game are based around 100k or 1m, so make a setting to switch between
-	settings.Add("100k", true, "Turn on to split on 100k. Turn off to split on 1m");
-	settings.Add("track lessons", false, "Makes the autosplitter split on returning to the menu so you can track lessons. Also disables the reset.");
+	settings.Add("100k split", true, "Split on 100k points.");
+	settings.Add("1m split", true, "Split on 1m points.");
+	settings.Add("track lessons", false, "Split on lessons (splits on returning to menu).");
 	vars.inMenu = true;
 	vars.splitLesson = false;
+	vars.oneHundredK = false;
+	vars.oneMil = false;
 }
 
 update {
 	vars.watcher.Update(game);
 	vars.splitLesson = false;
+	if (vars.watcher.Current == 0) {
+		vars.oneHundredK = false;
+		vars.oneMil = false;
+	}
 }
 
 split {
@@ -33,8 +40,16 @@ split {
 		}
 
 	} else {
-		int target = settings["100k"] ? 100000 : 1000000;
-		return vars.watcher.Current >= target;
+
+		if (settings["100k split"] && vars.watcher.Current > 100000 && !vars.oneHundredK) {
+			vars.oneHundredK = true;
+			return true;
+		}
+
+		if (settings["1m split"] && vars.watcher.Current > 1000000 && !vars.oneMil) {
+			vars.oneMil = true;
+			return true;
+		}
 	}
 }
 
